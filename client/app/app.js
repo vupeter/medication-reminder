@@ -4,8 +4,10 @@ angular.module('medicationReminderApp', [
   'ngCookies',
   'ngResource',
   'ngSanitize',
+  'ngAnimate',
+  'ngMaterial',
   'ui.router',
-  'ui.bootstrap'
+  'ui.bootstrap',
 ])
   .config(function ($stateProvider, $urlRouterProvider, $locationProvider) {
     $urlRouterProvider

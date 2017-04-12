@@ -1,19 +1,90 @@
-<div ng-include="'components/navbar/navbar.html'"></div>
+<div class="main" ng-init="getData()">
 
-<header class="hero-unit" id="banner">
+  <div ng-include="'components/navbar/navbar.html'"></div>
+
   <div class="container">
-      <h1>{{currentTime}}</h1>
-  </div>
-</header>
-<div class="container">
-  <div class="row">
-    <div class="col-lg-6 col-lg-offset-3 text-center">
-        <div ng-repeat="m in meds">
-            {{m.time}} {{m.name}} {{m.dosage}}
+    <div class="row">
+      <div class="col-lg-4 container">
+
+        <div class="alert alert-info rounded text-center">
+          <h1>{{time}}</h1>
+          <h4>{{date}}</h4>
         </div>
+
+        <md-calendar ng-model="selectedDate" class="horizontal-center"></md-calendar>
+
+        <h1><span class="label label-danger heading horizontal-center">Missed Medication</span></h1>
+
+        <div class=" alert alert-danger rounded reminder-info text-center" ng-repeat="m in meds | orderBy:'time' | filter:permaLate ">
+            <h3><span class="glyphicon glyphicon-exclamation-sign"></span> Missed Medication</h3>
+            <p>{{m.time | date : 'h:mm a'}}</p>
+            <p>{{m.name}}</p>
+            <p>{{m.dosage}}</p>
+            <p class="completed" ng-show="m.d.f">Completed {{m.d.f | date : 'h:mm a'}}</p>
+            <button ng-show="late(m) ? true : false" ng-click="complete(m)" class="btn btn-info complete">Complete</button>
+        </div>
+
+        <hr>
+
+
+      </div>
+
+      <div class="col-lg-4">
+
+            <h1><span class="label label-primary heading horizontal-center">Medication Schedule</span></h1>
+
+            <div ng-class="m.animation" class="panel panel-default rounded medication" ng-repeat="m in meds | filter: !completed | orderBy:'time' ">
+
+              <div class="panel-body row reminder {{dateCheck(m,5) ? 'reminder-active' : 'reminder-inactive'}}">
+
+                <div class="col-xs-3 vertical-center horizontal-center">
+                    <p class="glyphicon {{getIcon(m)}} notification"></p>
+                </div>
+                
+                <div class="col-xs-8 col-xs-offset-1 reminder-info">
+                    <p>{{m.time | date : 'h:mm a'}}</p>
+                    <p>{{m.name}}</p>
+                    <p>{{m.dosage}}</p>
+                    <p class="completed" ng-show="m.d.f">Completed {{m.d.f | date : 'h:mm a'}}</p>
+                    <button ng-show="late(m) ? true : false" ng-click="complete(m)" class="btn btn-info complete">Complete</button>
+                </div>
+
+              </div>
+
+            </div>
+      </div>
+
+      <div class="col-lg-4">
+
+            <h1><span class="label label-primary heading horizontal-center">Administered Medication</span></h1>
+
+            <div ng-class="m.animation" class="panel panel-default rounded medication" ng-repeat="m in meds | filter: completed | orderBy:'time' ">
+
+              <div class="panel-body row reminder {{dateCheck(m,5) ? 'reminder-active' : 'reminder-inactive'}}">
+
+                <div class="col-xs-3 vertical-center horizontal-center">
+                    <p class="glyphicon {{getIcon(m)}} notification"></p>
+                </div>
+                
+                <div class="col-xs-8 col-xs-offset-1 reminder-info">
+                    <p>{{m.time | date : 'h:mm a'}}</p>
+                    <p>{{m.name}}</p>
+                    <p>{{m.dosage}}</p>
+                    <p class="completed" ng-show="m.d.f">Completed {{m.d.f | date : 'h:mm a'}}</p>
+                    <button ng-show="late(m) ? true : false" ng-click="complete(m)" class="btn btn-info complete">Complete</button>
+                </div>
+
+              </div>
+
+            </div>
+      </div>
+
     </div>
   </div>
+
 </div>
+
+
 <footer class="footer">
   <div class="container">
       <p>© 2016 Mavencare™, made with <span class="glyphicon glyphicon-heart heart-red"></span> for better healthcare.</p>
